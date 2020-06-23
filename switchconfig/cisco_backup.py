@@ -24,8 +24,6 @@ import re
 import sys
 import socket
 import pexpect
-from docopt import docopt
-from docopt import printable_usage
 
 
 def checkDevices(ip_addr, port):
@@ -163,22 +161,15 @@ def writeConfig(hostname, config, write_dir):
 def main():
   """ Main part of script """
   # Global vars
-  username = "cisco"
-  enable ="cisco123"
-  password = "cisco123"
+  username = "lab"
+  enable ="lab123"
+  password = "lab123"
   write_dir = "configs"
   
-  ip_addr = 10.0.0.1
-  hostname = 'switch1'
+  ip_addr = '10.200.0.1'
+  hostname = 'LAB01'
   
-  if checkDevices(ip_addr, 22):
-    auth_method = "ssh"
-  elif checkDevices(ip_addr, 23):
-    auth_method = "telnet"
-  else:
-    print "ERROR: Could not connect to %s" % hostname
-    continue
-
+  auth_method = "telnet"
   # Get config
   print "Getting config from %s" % hostname
   (config, got_config) = getConfig(hostname, ip_addr, auth_method, 
