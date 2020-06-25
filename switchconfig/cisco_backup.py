@@ -65,7 +65,7 @@ def getConfig(hostname, ip_addr, auth_method, username, enable, password):
     child.sendline(password)
 
     # Check if we are in enable mode
-    i = child.expect(["%s>" % hostname, pexpect.TIMEOUT], timeout=1)
+    i = child.expect([hostname + ">", pexpect.TIMEOUT], timeout=1)
 
     if i == 0:
       # Switch to enable mode
@@ -73,33 +73,33 @@ def getConfig(hostname, ip_addr, auth_method, username, enable, password):
       child.expect("[pP]assword:")
       child.sendline(enable)
     
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
 
     # Disable paging
     child.sendline("terminal length 0")
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
 
     # Get Version
     child.sendline("sh version | i (image|Model number|interface|serial)")
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
 
     sh_version = child.before
 
     # Get VTP status
     child.sendline("sh vtp stat")
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
  
     sh_vtp_stat = child.before
 
     # Get VLANs
     child.sendline("sh vlan brief")
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
 
     sh_vlan = child.before
 
     # Get running-config
     child.sendline("sh run")
-    child.expect("%s#" % hostname)
+    child.expect("{0:s}#".format(hostname))
 
     sh_run = child.before
 
@@ -121,6 +121,16 @@ def getConfig(hostname, ip_addr, auth_method, username, enable, password):
 def _prepConfig(sh_version, sh_vtp_stat, sh_vlan, sh_run):
   """ Prepare cisco config """
   # Prepend lines
+  sh_version = str(sh_version)
+  sh_version = '\n'.join(sh_version.split("\\r\\n"))
+  sh_vtp_stat = str(sh_vtp_stat)
+  sh_vtp_stat = '\n'.join(sh_vtp_stat.split("\\r\\n"))
+  sh_vlan = str(sh_vlan)
+  sh_vlan = '\n'.join(sh_vlan.split("\\r\\n"))
+  sh_run = str(sh_run)
+  sh_run = '\n'.join(sh_run.split("\\r\\n"))
+
+
   sh_vtp_stat = '\n'.join("!VTP: %s" % i for i in sh_vtp_stat.splitlines()) 
   sh_vlan = '\n'.join("!VLAN: %s" % i for i in sh_vlan.splitlines())
   sh_version = '\n'.join("!VERS: %s" % i for i in sh_version.splitlines())
