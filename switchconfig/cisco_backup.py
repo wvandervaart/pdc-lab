@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #
 # Name:     cisco_backup.py
 # Synopsis: Backup Cisco switches
@@ -171,13 +170,13 @@ def main():
   
   auth_method = "telnet"
   # Get config
-  print "Getting config from %s" % hostname
+  print("Getting config from {0:s}".format(hostname))
   (config, got_config) = getConfig(hostname, ip_addr, auth_method, 
     username, enable, password)
 
   if got_config == True:
     # Write config to file
-    print "Writing config from %s to file" % hostname
+    print("Writing config from {0:s} to file".format(hostname))
     writeConfig(hostname, config, write_dir)
 
     # Add and commit config
@@ -186,7 +185,7 @@ def main():
   else:
     # For debugging purposes only
     #print config
-    print "ERROR: Could not get config from %s" % hostname 
+    print("ERROR: Could not get config from {0:s}".format(hostname))
 
 
 # Exucute main

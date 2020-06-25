@@ -9,6 +9,7 @@ while True:
     game_dict = {'rock': 1, 'scissors': 2, 'paper': 3}
     player_a = str(input("Player a: "))
     b = random.randint(1,3)
+    print("Player b chooses: " + list(game_dict.keys())[list(game_dict.values()).index(b)])
     a = game_dict.get(player_a)
     dif = a - b
 
